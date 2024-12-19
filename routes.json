@@ -1,0 +1,18 @@
+{
+  "routes": [
+    {
+      "route": "/api/*",
+      "serve": "https://hostel-api-chhphbakc9f8hvhb.canadacentral-01.azurewebsites.net/api",
+      "statusCode": 200
+    },
+    {
+      "route": "/index.html",
+      "serve": "/index.html"
+    },
+    {
+      "route": "/:path*",
+      "serve": "/index.html",
+      "statusCode": 200
+    }
+  ]
+}

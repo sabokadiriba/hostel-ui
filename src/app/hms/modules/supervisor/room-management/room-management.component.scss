@@ -1,0 +1,15 @@
+.room-details {
+    display: grid;
+    gap: 10px; /* Space between rows */
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between; /* Align items across the row */
+  }
+  .row p {
+    margin: 0; /* Remove default margin */
+    flex: 1; /* Ensure equal width for elements */
+    text-align: left; /* Optional: Align text for consistent layout */
+  }
+  

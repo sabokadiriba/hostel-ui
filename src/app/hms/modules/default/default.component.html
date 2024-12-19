@@ -1,0 +1,160 @@
+
+<div class="row" [appHideIfClaimsNotMet]= "claimReq.superAdminonly">
+  <div class="col-md-6">
+    <ng-template #feeCollectionTemplate>
+      <div class="card total-income-card overflow-hidden bg-primary-dark text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-lg icon m-r-5">
+              <i class="text-white ti ti-layout-board-split f-24"></i>
+            </div>
+            <div class="ms-2">
+              <h4 class="text-white f-w-600 mb-1">{{ activeSubscription }}</h4>
+              <p class="mb-0 opacity-50 text-sm">Active Subscriptiion</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card total-income-card warning overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-lg icon-warning m-r-5">
+              <i class="text-warning ti ti-layout-board-split f-24"></i>
+            </div>
+            <div class="ms-2">
+              <h4 class="f-w-600 mb-1">{{ inactiveSubscription }}</h4>
+              <p class="mb-0 opacity-50 text-sm">Inactive Subscriptiion</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="feeCollectionTemplate"></ng-container>
+  </div>
+  <div class="col-md-6">
+    <div class="card earning-card bg-secondary-dark text-white overflow-hidden">
+      <span class="round secondary-round small"></span>
+      <span class="round secondary-round big"></span>
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <div class="avatar avatar-lg">
+              <i class="text-white ti ti-credit-card f-24"></i>
+            </div>
+          </div>
+          <div class="col-auto">
+            <div class="btn-group" ngbDropdown>
+              <a type="button" class="avatar avatar-xs bg-secondary dropdown-toggle arrow-none" ngbDropdownToggle>
+                <i class="ti ti-dots"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <li><button class="dropdown-item" type="button">Import Card</button></li>
+                <li><button class="dropdown-item" type="button">Export</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <span class="text-white d-block f-34 f-w-500 my-2">
+          {{ totalHostel }}
+          <i class="ti ti-circle-arrow-up-right opacity-50"></i>
+        </span>
+        <p class="mb-0 opacity-50">Total number of Hostel</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" [appHideIfClaimsNotMet]= "claimReq.adminOnly">
+ 
+  <div class="col-md-6">
+    <div class="card earning-card bg-secondary-dark text-white overflow-hidden">
+      <span class="round secondary-round small"></span>
+      <span class="round secondary-round big"></span>
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <div class="avatar avatar-lg">
+              <i class="text-white ti ti-credit-card f-24"></i>
+            </div>
+          </div>
+         
+        </div>
+        <span class="text-white d-block f-34 f-w-500 my-2">
+          {{totalCustomer}}
+          <i class="ti ti-circle-arrow-up-right opacity-50"></i>
+        </span>
+        <p class="mb-0 opacity-50">Total Hosted Customers</p>
+      </div>
+    </div>
+  </div>
+  
+ 
+  <div class="col-md-6">
+    <ng-template #feeCollectionTemplate2>
+      <div class="card total-income-card overflow-hidden bg-primary-dark text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-lg icon m-r-5">
+              <i class="text-white ti ti-layout-board-split f-24"></i>
+            </div>
+            <div class="ms-2">
+              <h4 class="text-white f-w-600 mb-1">{{bookedRoom}}</h4>
+              <p class="mb-0 opacity-50 text-sm">Booked Rooms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card total-income-card warning overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-lg icon-warning m-r-5">
+              <i class="text-warning ti ti-layout-board-split f-24"></i>
+            </div>
+            <div class="ms-2">
+              <h4 class="f-w-600 mb-1">{{availableRoom}}</h4>
+              <p class="mb-0 opacity-50 text-sm">Available Rooms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="feeCollectionTemplate2"></ng-container>
+  </div>
+ 
+</div>
+<div class="row" [appHideIfClaimsNotMet]= "claimReq.superviserOnly">
+
+ 
+  <div class="col-md-12">
+    <ng-template #feeCollectionTemplate3>
+      <div class="card total-income-card overflow-hidden bg-primary-dark text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-lg icon m-r-5">
+              <i class="text-white ti ti-layout-board-split f-24"></i>
+            </div>
+            <div class="ms-2">
+              <h4 class="text-white f-w-600 mb-1">{{ bookedRoom }}</h4>
+              <p class="mb-0 opacity-50 text-sm">Booked Rooms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card total-income-card warning overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-lg icon-warning m-r-5">
+              <i class="text-warning ti ti-layout-board-split f-24"></i>
+            </div>
+            <div class="ms-2">
+              <h4 class="f-w-600 mb-1">{{ availableRoom }}</h4>
+              <p class="mb-0 opacity-50 text-sm">Available Rooms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="feeCollectionTemplate3"></ng-container>
+  </div>
+ 
+</div>
+

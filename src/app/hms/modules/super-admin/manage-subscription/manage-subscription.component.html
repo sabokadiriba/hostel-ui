@@ -1,0 +1,121 @@
+<div class="container mt-4">
+   <!-- Notification Area -->
+<div *ngIf="message" [ngClass]="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" class="alert" role="alert">
+  {{ message }}
+</div>
+    <div class="d-flex justify-content-between mb-3">
+      <input
+        type="text"
+        [(ngModel)]="filterText"
+        (input)="filterSubscriptions()"
+        class="form-control w-25"
+        placeholder="Search..."
+      />
+      <div>
+      <button class="btn btn-primary" (click)="openAddModal()">Add Subscription</button>
+      </div>
+    </div>
+  
+    <!-- Subscription Table -->
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-striped table-hover align-middle">
+          <thead class="table-dark">
+        <tr>
+          <th>Hostel</th>
+          <th>Subscription Type</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subscription of filteredSubscriptions">
+          <td>{{ subscription.hostelName }}</td>
+          <td>{{ subscription.subscriptionType }}</td>
+          <td>{{ subscription.startDate | date }}</td>
+          <td>{{ subscription.endDate | date }}</td>
+          <td>{{ subscription.isActive ? 'Yes' : 'No' }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="openEditModal(subscription)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    style="display: block; background-color: rgba(0, 0, 0, 0.5);"
+    *ngIf="showModal"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ isEditMode ? 'Update Subscription' : 'Add Subscription' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="hostelId" class="form-label">Hostel</label>
+            <select id="hostelId" [(ngModel)]="newSubscription.hostelId" class="form-select">
+              <option *ngFor="let hostel of hostels" [value]="hostel.hostelId">
+                {{ hostel.hostelName }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="subscriptionType" class="form-label">Subscription Type</label>
+            <input
+              id="subscriptionType"
+              type="text"
+              [(ngModel)]="newSubscription.subscriptionType"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input
+              id="startDate"
+              type="date"
+              [(ngModel)]="newSubscription.startDate"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input
+              id="endDate"
+              type="date"
+              [(ngModel)]="newSubscription.endDate"
+              class="form-control"
+            />
+          </div>
+          <div class="form-check">
+            <input
+              id="isActive"
+              type="checkbox"
+              [(ngModel)]="newSubscription.isActive"
+              class="form-check-input"
+            />
+            <label for="isActive" class="form-check-label">Is Active</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button
+            class="btn btn-primary"
+            (click)="isEditMode ? updateSubscription() : addSubscription()"
+          >
+            {{ isEditMode ? 'Update' : 'Add' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

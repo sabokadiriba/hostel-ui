@@ -1,0 +1,103 @@
+<div class="container my-4">
+  <!-- Notification Area -->
+  <div *ngIf="message" [ngClass]="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" class="alert" role="alert">
+    {{ message }}
+  </div>
+<!-- Add Room Button -->
+<div class="d-flex justify-content-between mb-3">
+  <!-- Search Input -->
+  <div class="me-3 flex-grow-1">
+    <input type="text" class="form-control" placeholder="Search inquiries..." [(ngModel)]="filterText" (input)="filterInquiries()" />
+  </div>
+
+  <!-- Add Supervisor Button -->
+  <div>
+    <button class="btn btn-primary btn-sm" (click)="openAddModal()">Add new inquiry</button>
+  </div>
+</div>
+
+ 
+  <!-- Inquiries Table -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Purpose</th>
+          <th>Remarks</th>
+          <th>Inquiry Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inquiry of filteredInquiries">
+          <td>{{ inquiry.inquiryId }}</td>
+          <td>{{ inquiry.name }}</td>
+          <td>{{ inquiry.phoneNumber }}</td>
+          <td>{{ inquiry.purpose }}</td>
+          <td>{{ inquiry.remarks }}</td>
+          <td>{{ inquiry.inquiryDate | date: 'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Inquiry Modal -->
+  <div class="modal fade show" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);" *ngIf="showAddModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Add Customer Inquiry</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeAddModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" [(ngModel)]="newInquiry.Name" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <input id="phoneNumber" type="text" [(ngModel)]="newInquiry.PhoneNumber" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="purpose" class="form-label">Purpose</label>
+            <input id="purpose" type="text" [(ngModel)]="newInquiry.Purpose" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="remarks" class="form-label">Remarks</label>
+            <textarea id="remarks" [(ngModel)]="newInquiry.Remarks" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="submitInquiry()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal for Editing Department -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editModalLabel">Edit Department</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="editForm" method="post">
+                  <div class="mb-3">
+                      <label for="DepartmentName" class="form-label">Department Name</label>
+                      <input type="text" class="form-control" id="editDepartmentName" name="DepartmentName" required>
+                  </div>
+                  <!-- Add other fields here -->
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="updateButton">Save changes</button>
+          </div>
+      </div>
+  </div>
+</div>

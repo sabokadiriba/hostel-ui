@@ -1,0 +1,210 @@
+<div class="container my-4">
+   
+  <div class="d-flex justify-content-between mb-3">
+    <!-- Search Input -->
+    <div class="me-3 flex-grow-1">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search customers..."
+        [(ngModel)]="filterText"
+        (input)="filterCustomers()"
+      />
+    </div>
+
+    <!-- Add Admin Button -->
+    <div>
+      <button class="btn btn-primary btn-sm" (click)="openAddModal()">Add Customer</button>
+    </div>
+  </div>
+
+  
+  
+   
+  
+    <!-- Customer Table -->
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Room No</th>
+            <th>Check-In Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of filteredCustomers">
+            <td>{{ customer.customerId }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.phoneNumber }}</td>
+            <td>{{ customer.roomNumber }}</td>
+            <td>{{ customer.checkInDate | date }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.customerId)">Delete</button>
+       
+               <!-- Discharge Button (For Customers in a Room) -->
+          <button 
+          class="btn btn-warning mx-2 btn-sm" 
+          *ngIf="customer.roomId" 
+          (click)="openDischargeModal(customer)"
+          title="Discharge Customer"
+        >
+          Releave
+        </button>
+     
+                   </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Add/Edit Customer Modal -->
+    <div *ngIf="showModal" class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">{{ editMode ? 'Edit Customer' : 'Add Customer' }}</h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            <form #customerForm="ngForm">
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input id="name" [(ngModel)]="customerDto.name" name="name" type="text" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input id="phone" [(ngModel)]="customerDto.phoneNumber" name="phone" type="text" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="aadhaar" class="form-label">Aadhaar Number</label>
+                <input id="aadhaar" [(ngModel)]="customerDto.aadhaarNumber" name="aadhaar" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input id="address" [(ngModel)]="customerDto.address" name="address" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="company" class="form-label">Company Name</label>
+                <input id="company" [(ngModel)]="customerDto.companyName" name="company" type="text" class="form-control" />
+              </div>
+              
+            
+              <div class="mb-3">
+                <label for="photo" class="form-label">Photo</label>
+                <input id="photo" (change)="onFileSelect($event, 'photo')" name="photo" type="file" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="aadhaarFront" class="form-label">Aadhaar Front</label>
+                <input id="aadhaarFront" (change)="onFileSelect($event, 'aadhaarFront')" name="aadhaarFront" type="file" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="aadhaarBack" class="form-label">Aadhaar Back</label>
+                <input id="aadhaarBack" (change)="onFileSelect($event, 'aadhaarBack')" name="aadhaarBack" type="file" class="form-control" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+            <button class="btn btn-primary" (click)="saveCustomer()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteModal" class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+         
+          <button type="button" class="btn-close btn-close-white" (click)="closeDeleteModal()"></button>
+        </div>
+        <div class="modal-body">
+          <h4>Are you sure?</h4>
+          <p>Do you really want to delete this customer? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="deleteCustomer()">Yes, Delete</button>
+          <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+<!-- Discharge Modal -->
+<div *ngIf="showDischargeModal" class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Discharge Customer</h5>
+        <button class="btn-close btn-close-white" (click)="closeDischargeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Customer Name:</strong> {{ selectedCustomer?.name }}</p>
+        <p><strong>Room Number:</strong> {{ selectedCustomer?.roomNumber }}</p>
+        <p><strong>Fee Due:</strong> {{ selectedCustomer?.feeDue !== undefined ? selectedCustomer?.feeDue : 'N/A' }}</p>
+       
+        <!-- Discharge Logic -->
+        <ng-container *ngIf="selectedCustomer?.feeDue === 0; else feeDueMessage">
+          <p class="text-success">Are you sure you want to discharge this customer?</p>
+          <button class="btn btn-danger btn-sm" (click)="relieveCustomer()">Discharge Customer</button>
+        </ng-container>
+        <ng-template #feeDueMessage>
+          <p class="text-danger">The customer has not paid the fee due. Please collect the fee before discharging.</p>
+          <button class="btn btn-danger btn-sm" disabled>Discharge Customer</button>
+        </ng-template>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeDischargeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Fee Collection Modal -->
+<div *ngIf="showFeeModal" class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Collect Fee</h5>
+        <button class="btn-close btn-close-white" (click)="closeFeeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Customer and Room Details -->
+        <p><strong>Customer Name:</strong> {{ selectedCustomer?.name }}</p>
+        <p><strong>Room Number:</strong> {{ selectedCustomer?.roomNumber }}</p>
+        <p><strong>Total Due Fee:</strong> {{ selectedCustomer?.totalFee | currency }}</p>
+        <p><strong>Next Due Date:</strong> {{ selectedCustomer?.nextDueDate | date }}</p>
+
+        <!-- Payment Input -->
+        <p><strong>Payment Amount:</strong></p>
+        <input 
+          type="number" 
+          [(ngModel)]="paymentAmount" 
+          class="form-control mb-3" 
+          placeholder="Enter payment amount"
+          (input)="validatePayment()">
+
+        <!-- Validation Error Message -->
+        <div *ngIf="paymentError" class="alert alert-danger">
+          {{ paymentError }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeFeeModal()">Close</button>
+        <button 
+          class="btn btn-success" 
+          [disabled]="!paymentAmount || paymentAmount <= 0 || paymentError" 
+          (click)="recordPayment(selectedCustomer?.customerId)">
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

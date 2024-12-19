@@ -1,0 +1,97 @@
+<div class="container my-4">
+   
+  <div class="d-flex justify-content-between mb-3">
+    <!-- Search Input -->
+    <div class="me-3 flex-grow-1">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search customers by phone number "
+        [(ngModel)]="filterText"
+        (input)="filterCustomers()"
+      />
+    </div>
+
+    <!-- Add Admin Button -->
+   
+  </div>
+
+    <!-- Customer Table -->
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Room No</th>
+            <th>Check-In Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of filteredCustomers">
+            <td>{{ customer.customerId }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.phoneNumber }}</td>
+            <td>{{ customer.roomNumber }}</td>
+            <td>{{ customer.checkInDate | date }}</td>
+            <td>
+             
+        <button 
+        class="btn btn-success btn-sm" 
+        *ngIf="customer.roomId" 
+        (click)="openFeeModal(customer)" 
+        title="Collect Fee">
+        Collect Fee
+      </button>
+                   </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+ 
+
+
+<!-- Fee Collection Modal -->
+<div *ngIf="showFeeModal" class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Collect Fee</h5>
+        <button class="btn-close btn-close-white" (click)="closeFeeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Customer and Room Details -->
+        <p><strong>Customer Name:</strong> {{ selectedCustomer?.name }}</p>
+        <p><strong>Room Number:</strong> {{ selectedCustomer?.roomNumber }}</p>
+        <p><strong>Total Due Fee:</strong> {{ selectedCustomer?.dueAmount | currency }}</p>
+        <p><strong>Next Due Date:</strong> {{ selectedCustomer?.nextDueDate | date }}</p>
+
+        <!-- Payment Input -->
+        <p><strong>Payment Amount:</strong></p>
+        <input 
+          type="number" 
+          [(ngModel)]="paymentAmount" 
+          class="form-control mb-3" 
+          placeholder="Enter payment amount"
+          (input)="validatePayment()">
+
+        <!-- Validation Error Message -->
+        <div *ngIf="paymentError" class="alert alert-danger">
+          {{ paymentError }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeFeeModal()">Close</button>
+        <button 
+          class="btn btn-success" 
+          [disabled]="!paymentAmount || paymentAmount <= 0 || paymentError" 
+          (click)="recordPayment(selectedCustomer?.customerId)">
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

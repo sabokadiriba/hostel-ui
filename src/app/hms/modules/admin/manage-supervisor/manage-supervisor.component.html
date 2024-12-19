@@ -1,0 +1,119 @@
+<div class="container my-4">
+ <!-- Notification Area -->
+<div *ngIf="message" [ngClass]="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" class="alert" role="alert">
+  {{ message }}
+</div>
+  <div class="d-flex justify-content-between mb-3">
+    <!-- Search Input -->
+    <div class="me-3 flex-grow-1">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search supervisors..."
+        [(ngModel)]="filterText"
+        (input)="filterSupervisors()"
+      />
+    </div>
+
+    <!-- Add Supervisor Button -->
+    <div>
+      <button class="btn btn-primary btn-sm" (click)="openAddModal()">Add Supervisor</button>
+    </div>
+  </div>
+
+  <!-- Supervisor Table -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Hostel ID </th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let supervisor of filteredSupervisors; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ supervisor.email }}</td>
+          <td>{{ supervisor.phoneNumber }}</td>
+          <td>{{ supervisor.hostelId }}</td>
+          <td class="text-center">
+            <!-- View Details -->
+            <button
+              class="btn btn-info btn-sm"
+              (click)="openDetailModal(supervisor)"
+              title="View Details"
+            >
+              View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Supervisor Modal -->
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    style="display: block; background-color: rgba(0,0,0,0.5);"
+    *ngIf="showAddModal"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Add Supervisor</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeAddModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" type="email" [(ngModel)]="newSupervisor.email" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <input id="phoneNumber" type="text" [(ngModel)]="newSupervisor.phoneNumber" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" [(ngModel)]="newSupervisor.password" class="form-control" />
+          </div>
+         
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="addSupervisor()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supervisor Details Modal -->
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    style="display: block; background-color: rgba(0,0,0,0.5);"
+    *ngIf="showDetailModal"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Supervisor Details</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeDetailModal()"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Email:</strong> {{ selectedSupervisor?.email }}</li>
+            <li class="list-group-item"><strong>Phone Number:</strong> {{ selectedSupervisor?.phoneNumber }}</li>
+            <li class="list-group-item"><strong>Hostel ID:</strong> {{ selectedSupervisor?.hostelId }}</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeDetailModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

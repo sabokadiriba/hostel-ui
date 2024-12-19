@@ -1,0 +1,16 @@
+.text-danger {
+    color: #f44336; /* Customize the red color if needed */
+  }
+  
+  .fs-6 {
+    font-size: 0.875rem; /* Small font size for error messages */
+  }
+  
+  .form-floating .form-control:invalid {
+    border-color: #f44336; /* Red border for invalid inputs */
+  }
+  
+  .form-floating .form-control:focus:invalid {
+    box-shadow: 0 0 5px rgba(244, 67, 54, 0.5); /* Focused red shadow for invalid inputs */
+  }
+  

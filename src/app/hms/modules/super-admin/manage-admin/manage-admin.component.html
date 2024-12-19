@@ -1,0 +1,121 @@
+<div class="container my-4">
+    <div class="d-flex justify-content-between mb-3">
+      <!-- Search Input -->
+      <div class="me-3 flex-grow-1">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search admins..."
+          [(ngModel)]="filterText"
+          (input)="filterAdmins()"
+        />
+      </div>
+  
+      <!-- Add Admin Button -->
+      <div>
+        <button class="btn btn-primary btn-sm" (click)="openAddModal()">Add Admin</button>
+      </div>
+    </div>
+  
+    <!-- Admin Table -->
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Hostel ID</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let admin of filteredAdmins">
+            <td>{{ admin.id }}</td>
+            <td>{{ admin.email }}</td>
+            <td>{{ admin.phoneNumber }}</td>
+            <td>{{ admin.hostelId }}</td>
+            <td class="text-center">
+              <!-- View Details -->
+              <button
+                class="btn btn-info btn-sm"
+                (click)="openDetailModal(admin)"
+                title="View Details"
+              >
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Add Admin Modal -->
+    <div
+      class="modal fade show"
+      tabindex="-1"
+      style="display: block; background-color: rgba(0,0,0,0.5);"
+      *ngIf="showAddModal"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">Add Admin</h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeAddModal()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" type="email" [(ngModel)]="newAdmin.email" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <input id="phoneNumber" type="text" [(ngModel)]="newAdmin.phoneNumber" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input id="password" type="password" [(ngModel)]="newAdmin.password" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="hostelId" class="form-label">Hostel</label>
+                <select id="hostelId" [(ngModel)]="newAdmin.hostelId" class="form-control">
+                  <option *ngFor="let hostel of hostels" [value]="hostel.hostelId">{{ hostel.hostelName }}</option>
+                </select>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+            <button class="btn btn-primary" (click)="addAdmin()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Admin Details Modal -->
+    <div
+      class="modal fade show"
+      tabindex="-1"
+      style="display: block; background-color: rgba(0,0,0,0.5);"
+      *ngIf="showDetailModal"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">Admin Details</h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeDetailModal()"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group">
+              <li class="list-group-item"><strong>Email:</strong> {{ selectedAdmin?.email }}</li>
+              <li class="list-group-item"><strong>Phone Number:</strong> {{ selectedAdmin?.phoneNumber }}</li>
+              <li class="list-group-item"><strong>Hostel ID:</strong> {{ selectedAdmin?.hostelId }}</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeDetailModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
